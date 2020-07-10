@@ -7,4 +7,10 @@
 3. Modal window
 4. Slide view
 
-## Pro.1 started at 7.6
+## Journal
+
+1. Set development environment
+ 1.1. Module bundler > parcel
+ 1.2. React with typescript
+ 1.3. Babel
+
