@@ -10,7 +10,7 @@
 ## Journal
 
 1. Set development environment
- 1.1. Module bundler > parcel
- 1.2. React with typescript
- 1.3. Babel
-
+   1.1. Module bundler > parcel
+   1.2. React with typescript
+   1.3. Babel - preset-env
+   1.4. styled-component
