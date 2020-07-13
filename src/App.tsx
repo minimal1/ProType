@@ -2,6 +2,11 @@
 
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Link, Router } from "@reach/router";
+import Calc from "./pages/Calc";
+import Modal from "./pages/Modal";
+import Todo from "./pages/Todo";
+import Slide from "./pages/Slide";
 
 interface IProps {}
 
@@ -11,10 +16,10 @@ const App = (props: IProps) => {
   return (
     <Layout>
       <Sidebar isVisible={visible}>
-        <a href='#'>Calc</a>
-        <a href='#'>Todo</a>
-        <a href='#'>Modal</a>
-        <a href='#'>Slide</a>
+        <Link to='/calc'>Calc</Link>
+        <Link to='/todo'>Todo</Link>
+        <Link to='/modal'>Modal</Link>
+        <Link to='/slide'>Slide</Link>
       </Sidebar>
       <Container>
         <Header>
@@ -24,7 +29,14 @@ const App = (props: IProps) => {
           <span>Welcome</span>
           <span></span>
         </Header>
-        <MainLayout></MainLayout>
+        <MainLayout>
+          <Router>
+            <Calc path='/calc' />
+            <Todo path='/todo' />
+            <Modal path='/modal' />
+            <Slide path='/slide' />
+          </Router>
+        </MainLayout>
       </Container>
     </Layout>
   );
@@ -58,7 +70,7 @@ const Sidebar = styled.nav<{ isVisible: Boolean }>`
   margin: 0;
   background-color: #f8f8f8;
   height: 100vh;
-  width: 30%;
+  width: 20%;
   display: ${(p) => (p.isVisible ? "flex" : "none")};
   flex-direction: column;
 `;
