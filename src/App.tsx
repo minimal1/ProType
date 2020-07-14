@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link, Router } from '@reach/router';
-import Calc from './pages/Calc';
-import Modal from './pages/Modal';
-import Todo from './pages/Todo';
-import Slide from './pages/Slide';
+import PageCalc from './pages/PageCalc';
+import PageModal from './pages/PageModal';
+import PageTodo from './pages/PageTodo';
+import PageSlide from './pages/PageSlide';
 
 interface IProps {}
 
@@ -31,10 +31,10 @@ const App = (props: IProps) => {
         </Header>
         <MainLayout>
           <Router>
-            <Calc path="/calc" />
-            <Todo path="/todo" />
-            <Modal path="/modal" />
-            <Slide path="/slide" />
+            <PageCalc path="/calc" />
+            <PageTodo path="/todo" />
+            <PageModal path="/modal" />
+            <PageSlide path="/slide" />
           </Router>
         </MainLayout>
       </Container>
