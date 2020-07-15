@@ -15,3 +15,4 @@
    1.3. Babel - preset-env
    1.4. styled-component
    1.5. @reach/router for link router : https://reach.tech/router
+2. Add Modal - ez
