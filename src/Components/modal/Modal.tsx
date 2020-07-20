@@ -4,7 +4,17 @@ import styled from 'styled-components';
 const Modal = () => {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const handleKeyPress: (evt: KeyboardEvent) => any = evt => {
+    if (isOpen) {
+      const { key } = evt;
+
+      key === 'Escape' ? setIsOpen(false) : null;
+    }
+  };
+
   const handleClose = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!isOpen) return;
+
     const t: HTMLElement = e.target as HTMLElement;
 
     if (
@@ -14,6 +24,14 @@ const Modal = () => {
       setIsOpen(false);
     }
   };
+
+  React.useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  });
 
   return (
     <React.Fragment>
@@ -51,7 +69,8 @@ const Button = styled.button`
   padding: 10px;
   cursor: pointer;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
-  &:active {
+  &:active,
+  &:focus {
     outline: none;
   }
   &:hover {
