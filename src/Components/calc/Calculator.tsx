@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Big from 'big.js';
 import styled from 'styled-components';
 
 enum ButtonType {
@@ -13,62 +14,90 @@ enum OperType {
   PLUS = '+',
   DOT = '.',
   CLEAR = 'C',
+  DONE = '=',
   NONE = '',
 }
+const operate = (firstNum: string, secondNum: string, oper: string) => {
+  const num1 = Big(firstNum || '0');
+  const num2 = Big(
+    secondNum ||
+      (oper === OperType.DIVIDE || oper === OperType.MULTI ? '1' : '0'),
+  );
+
+  if (oper === OperType.PLUS) {
+    return num1.plus(num2).toString();
+  }
+  if (oper === OperType.MINUS) {
+    return num1.minus(num2).toString();
+  }
+  if (oper === OperType.DIVIDE) {
+    if (num2.toString() === '0') {
+      alert('Divide by 0 error');
+      return '0';
+    } else {
+      return num1.div(num2).toString();
+    }
+  }
+  if (oper === OperType.MULTI) {
+    return num1.times(num2).toString();
+  }
+  return '0';
+};
 
 const Calculator = () => {
-  const [result, setResult] = React.useState(0);
+  const [result, setResult] = React.useState('');
+  const [num, setNum] = React.useState('');
 
-  const [calculating, setCalculating] = React.useState(false);
-
-  const [num, setNum] = React.useState(0);
   const [oper, setOper] = React.useState('');
   const handleNumber = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
-    setNum(parseInt(e.currentTarget.innerHTML, 10));
+    const div = e.target as HTMLDivElement;
+
+    setNum(prev => (prev ? prev + div.innerHTML : div.innerHTML));
   };
+
   const handleOper = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
-    setOper(e.currentTarget.innerHTML);
-  };
-
-  React.useEffect(() => {
-    switch (oper) {
+    switch (e.currentTarget.innerHTML) {
       case OperType.CLEAR:
-        setResult(0);
-        break;
-      case OperType.PLUS:
-        setResult(prevState => prevState + num);
-        break;
-      case OperType.MINUS:
-        setResult(prevState => prevState - num);
-        break;
-      case OperType.DIVIDE:
-        setResult(prevState => prevState / num);
-        break;
-      case OperType.MULTI:
-        setResult(prevState => prevState * num);
+        setResult('');
+        setNum('');
+        setOper('');
         break;
       case OperType.DOT:
-        console.log('Operator dot is clicked');
+        if (num) {
+          if (!num.includes('.')) {
+            setNum(prev => prev + '.');
+          }
+        } else {
+          setNum('0.');
+        }
+        break;
+      case OperType.DONE:
+        if (num && oper) {
+          setResult(operate(result, num, oper));
+          setNum('');
+          setOper('');
+        }
         break;
       default:
+        if (oper) {
+          setResult(operate(result, num, oper));
+          setNum('');
+          setOper(e.currentTarget.innerHTML);
+        } else if (!num) {
+          setOper(e.currentTarget.innerHTML);
+        } else {
+          setResult(num);
+          setNum('');
+          setOper(e.currentTarget.innerHTML);
+        }
         break;
     }
-    setNum(0);
-    setOper(OperType.NONE);
-  }, [oper]);
-
-  React.useEffect(() => {
-    if (oper === OperType.NONE) {
-      setResult(prevState => prevState * 10 + num);
-    }
-    // TODO : 동일한 숫자 눌리는 경우 업데이트 안됨
-  }, [num]);
-
+  };
   return (
     <TopContainer>
-      <ResultContent>{result}</ResultContent>
+      <ResultContent>{num || result || '0'}</ResultContent>
       <CalcBtn btnType={ButtonType.OPER} onClick={handleOper}>
         C
       </CalcBtn>
